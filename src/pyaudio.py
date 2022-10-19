@@ -277,10 +277,7 @@ def get_format_from_width(width, unsigned = True):
     """
 
     if width == 1:
-        if unsigned:
-            return paUInt8
-        else:
-            return paInt8
+        return paUInt8 if unsigned else paInt8
     elif width == 2:
         return paInt16
     elif width == 3:
@@ -600,7 +597,7 @@ class Stream:
             raise IOError("Not output stream",
                           paCanNotWriteToAnInputOnlyStream)
 
-        if num_frames == None:
+        if num_frames is None:
             # determine how many frames to read
             width = get_sample_size(self._format)
             num_frames = int(len(frames) / (self._channels * width))
@@ -754,10 +751,7 @@ class PyAudio:
         """
 
         if width == 1:
-            if unsigned:
-                return paUInt8
-            else:
-                return paInt8
+            return paUInt8 if unsigned else paInt8
         elif width == 2:
             return paInt16
         elif width == 3:
@@ -971,9 +965,9 @@ class PyAudio:
 
         """
 
-        if input_device == None and output_device == None:
+        if input_device is None and output_device is None:
             raise ValueError("must specify stream format for input, " +\
-                             "output, or both", paInvalidDevice);
+                                 "output, or both", paInvalidDevice);
 
         kwargs = {}
 
@@ -1119,9 +1113,9 @@ else:
             kwargs = {"flags" : flags,
                       "channel_map" : channel_map}
 
-            if flags == None:
+            if flags is None:
                 del kwargs["flags"]
-            if channel_map == None:
+            if channel_map is None:
                 del kwargs["channel_map"]
 
             self._paMacCoreStreamInfo = paMacCoreStreamInfo(**kwargs)

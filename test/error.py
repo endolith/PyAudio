@@ -5,6 +5,7 @@ Test for a variety of error conditions. This
 example demonstrates exception handling with
 PyAudio. """
 
+
 import pyaudio
 
 p = pyaudio.PyAudio()
@@ -14,7 +15,7 @@ try:
     p.get_sample_size(10)
 except ValueError as e:
     assert e.args[1] == pyaudio.paSampleFormatNotSupported
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "sample size"
 
@@ -31,7 +32,7 @@ try:
     p.get_host_api_info_by_type(-1)
 except IOError as e:
     assert e.args[1] == pyaudio.paHostApiNotFound
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "invalid host type"
 
@@ -40,7 +41,7 @@ try:
     p.get_host_api_info_by_index(-1)
 except IOError as e:
     assert e.args[1] == pyaudio.paInvalidHostApi
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "invalid host api index"
 
@@ -48,9 +49,8 @@ else:
 try:
     p.get_device_info_by_host_api_device_index(0, -1)
 except IOError as e:
-    assert ((e.args[1] == pyaudio.paInvalidDevice) or \
-            (e.args[1] == pyaudio.paInvalidHostApi))
-    print("OK: %s" % e.args[0])
+    assert e.args[1] in [pyaudio.paInvalidDevice, pyaudio.paInvalidHostApi]
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "device info by host api device idnex"
 
@@ -59,9 +59,8 @@ else:
 try:
     p.get_device_info_by_host_api_device_index(-1, 0)
 except IOError as e:
-    assert ((e.args[1] == pyaudio.paInvalidDevice) or \
-            (e.args[1] == pyaudio.paInvalidHostApi))
-    print("OK: %s" % e.args[0])
+    assert e.args[1] in [pyaudio.paInvalidDevice, pyaudio.paInvalidHostApi]
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "device info by host api device idnex"
 
@@ -71,7 +70,7 @@ try:
     p.get_device_info_by_index(-1)
 except IOError as e:
     assert e.args[1] == pyaudio.paInvalidDevice
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "bad device index"
 
@@ -88,7 +87,7 @@ stream = p.open(channels = 1,
 try:
     data = stream.read(2)
 except IOError as e:
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
     assert e.args[1] == pyaudio.paStreamIsStopped, e.args[1]
 else:
     assert False, "Should have caused exception"
@@ -100,7 +99,7 @@ try:
     stream.write('foobar')
 except IOError as e:
     assert e.args[1] == pyaudio.paCanNotWriteToAnInputOnlyStream
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "write to input stream"
 
@@ -118,7 +117,7 @@ try:
 except IOError as e:
     # some slower machines might overflow
     assert e.args[1] == pyaudio.paInputOverflowed, e
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     print("OK: got %d bytes of data" % len(data))
 
@@ -132,7 +131,7 @@ try:
     stream.get_input_latency()
 except IOError as e:
     assert e.args[1] == pyaudio.paBadStreamPtr
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "closed stream"
 
@@ -141,7 +140,7 @@ try:
     stream.read(10)
 except IOError as e:
     assert e.args[1] == pyaudio.paBadStreamPtr
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "closed stream"
 
@@ -150,7 +149,7 @@ try:
     p.is_format_supported(8000, -1, 1, pyaudio.paInt16)
 except ValueError as e:
     assert e.args[1] == pyaudio.paInvalidDevice
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "invalid device"
 
@@ -159,7 +158,7 @@ try:
     p.is_format_supported(8000, 0, -1, pyaudio.paInt16)
 except ValueError as e:
     assert e.args[1] == pyaudio.paInvalidChannelCount
-    print("OK: %s" % e.args[0])
+    print(f"OK: {e.args[0]}")
 else:
     assert False, "invalid number of channels"
 
