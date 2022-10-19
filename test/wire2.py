@@ -6,18 +6,16 @@ and play them back immediately).
 
 Half Duplex version; see wire.py for Full Duplex. """
 
+
 import pyaudio
 import sys
 
 chunk = 1024
 WIDTH = 2
-CHANNELS = 2
 RATE = 44100
 RECORD_SECONDS = 5
 
-if sys.platform == 'darwin':
-    CHANNELS = 1
-
+CHANNELS = 1 if sys.platform == 'darwin' else 2
 p = pyaudio.PyAudio()
 
 # use default input device
@@ -37,7 +35,7 @@ stream_output = p.open(format =
                        frames_per_buffer = chunk)
 
 print("* recording")
-for i in range(0, int(44100 / chunk * RECORD_SECONDS)):
+for _ in range(int(44100 / chunk * RECORD_SECONDS)):
     data = stream_input.read(chunk)
     stream_output.write(data, chunk)
 print("* done")

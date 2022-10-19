@@ -26,6 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+
 from distutils.core import setup, Extension
 import sys
 import os
@@ -79,21 +80,15 @@ if sys.platform == 'darwin':
 if STATIC_LINKING:
 
     # platform specific configuration
-    if sys.platform == 'darwin':
+    if sys.platform in ['cygwin', 'win32']:
+        external_libraries += ['winmm']
+        extra_link_args += ['-lwinmm']
+
+    elif sys.platform == 'darwin':
         extra_link_args += ['-framework', 'CoreAudio',
                             '-framework', 'AudioToolbox',
                             '-framework', 'AudioUnit',
                             '-framework', 'Carbon']
-
-    elif sys.platform == 'cygwin':
-        external_libraries += ['winmm']
-        extra_link_args += ['-lwinmm']
-
-    elif sys.platform == 'win32':
-        # i.e., Win32 Python with mingw32
-        # run: python setup.py build -cmingw32
-        external_libraries += ['winmm']
-        extra_link_args += ['-lwinmm']
 
     elif sys.platform == 'linux2':
         external_libraries += ['rt', 'm', 'pthread']

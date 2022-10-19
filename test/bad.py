@@ -25,10 +25,7 @@ def get_format_from_width(width, unsigned = True):
     p = _portaudio
 
     if width == 1:
-        if unsigned:
-            return p.paUInt8
-        else:
-            return p.paInt8
+        return p.paUInt8 if unsigned else p.paInt8
     elif width == 2:
         return p.paInt16
     elif width == 3:
@@ -40,7 +37,7 @@ def get_format_from_width(width, unsigned = True):
 
 
 if len(sys.argv) < 2:
-    print("Usage: %s filename.wav" % sys.argv[0])
+    print(f"Usage: {sys.argv[0]} filename.wav")
     sys.exit(-1)
 
 wf = wave.open(sys.argv[1], 'rb')

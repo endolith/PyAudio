@@ -3,20 +3,18 @@ PyAudio example:
 Record a few seconds of audio and save to a WAVE file.
 """
 
+
 import pyaudio
 import wave
 import sys
 
 chunk = 1024
 FORMAT = pyaudio.paInt16
-CHANNELS = 2
 RATE = 44100
 RECORD_SECONDS = 5
 WAVE_OUTPUT_FILENAME = "output.wav"
 
-if sys.platform == 'darwin':
-    CHANNELS = 1
-
+CHANNELS = 1 if sys.platform == 'darwin' else 2
 p = pyaudio.PyAudio()
 
 stream = p.open(format = FORMAT,
@@ -28,7 +26,7 @@ stream = p.open(format = FORMAT,
 print("* recording")
 all = []
 
-for i in range(0, int(RATE / chunk * RECORD_SECONDS)):
+for _ in range(int(RATE / chunk * RECORD_SECONDS)):
     data = stream.read(chunk)
     all.append(data)
 
